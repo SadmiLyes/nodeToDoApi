@@ -5,12 +5,12 @@ const {app} = require('./../server');
 const {Todo} = require('./../model/todo');
 
 const todos = [{
-        _id: new ObjectID(),
-        text:'First test todo'
-    },{
     _id: new ObjectID(),
     text:'First test todo'
-    }];
+},{
+    _id: new ObjectID(),
+    text:'First test todo'
+}];
 
 
 beforeEach((done)=>{
@@ -30,7 +30,7 @@ describe('POST /todos', ()=>{
             })
             .end((err,res)=>{
                 if(err){
-                   return done(err);
+                    return done(err);
                 }
 
                 Todo.find({text}).then((todos)=>{
@@ -79,16 +79,52 @@ describe('GET /todo/:id',()=>{
             .end(done);
     });
     it('should return 404 if todo not found', (done) => {
-            request(app)
-                .get(`/todos/${new ObjectID()}`)
-                .expect(404)
-                .end(done);
-        });
+        request(app)
+            .get(`/todos/${new ObjectID()}`)
+            .expect(404)
+            .end(done);
+    });
 
     it('should return 404 for non-object ids',(done)=>{
-            request(app)
-                .get(`/todos/123`)
-                .expect(404)
-                .end(done);
-        });
+        request(app)
+            .get(`/todos/123`)
+            .expect(404)
+            .end(done);
+    });
 })
+/*
+
+describe('DELETE /todo/:id', () => {
+    var hexId = todos[1]._id.toHexString();
+    it('should remove a todo ', (done) => {
+        request(app)
+            .delete(`/todos/${hexId}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo._id).toBe(hexId);
+            })
+            .end((err) => {
+                if (err) {
+                    return done(err);
+                }
+                Todo.findById(hexId).then((todos) => {
+                    expect(todos).toNotExist();
+                    done();
+                }).catch((e) => done(e));
+            });
+    });
+    it('should return 404 if todo not found', (done) => {
+        request(app)
+            .get(`/todos/${new ObjectID()}`)
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return 404 for non-object ids', (done) => {
+        request(app)
+            .get(`/todos/123`)
+            .expect(404)
+            .end(done);
+    });
+
+})*/
